@@ -5,17 +5,8 @@ import type { AppProps } from "next/app";
 import Layout from "../components/Layout";
 
 const theme = createTheme({
-  typography: {
-    fontFamily: "Arial",
-  },
   palette: {
-    mode: "light",
-    primary: {
-      main: "#e65100",
-    },
-    background: {
-      default: '#D3D3D3',
-    },
+    mode: "dark",
   },
 });
 
