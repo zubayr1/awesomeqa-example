@@ -12,4 +12,4 @@ setup: venv install
 
 
 run:
-	python -m app.main
+	$(VENV_NAME)/bin/python -m app.main
