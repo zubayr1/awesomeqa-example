@@ -21,6 +21,8 @@ TICKET_FILEPATH = "../data/awesome_tickets.json"
 ticket_repository = TicketRepository(filepath=TICKET_FILEPATH)
 message_repository = MessageRepository(filepath=TICKET_FILEPATH)
 
+
+
 @app.get("/healthz")
 async def root():
     return "OK"
@@ -36,12 +38,13 @@ async def get_tickets(
 
 
 
-@app.get("/all_tickets/{start}")
+@app.get("/all_tickets/{start}/{end}")
 async def get_all_tickets(
     start:int,
+    end:int,
     ticket_repository: TicketRepository = Depends(lambda: ticket_repository),
 ):
-    tickets = ticket_repository.get_sub_tickets(start)
+    tickets = ticket_repository.get_sub_tickets(start, end)
     return JSONResponse(tickets, status_code=200)
 
 
@@ -51,8 +54,8 @@ async def get_ticket_by_id(
     id:str,
     ticket_repository: TicketRepository = Depends(lambda: ticket_repository),
 ):
-    tickets = ticket_repository.get_tickets() 
-    ticket = ticket_repository.get_ticket_by_id(id, tickets)
+    ticket = ticket_repository.get_ticket_by_id(id)
+
     if ticket:
         return JSONResponse([ticket], status_code=200)
     return JSONResponse([], status_code=200)
@@ -62,8 +65,7 @@ async def get_ticket_by_id(
 @app.delete("/delete_ticket/{index}")
 async def delete_ticket(
     index: int):
-    tickets = ticket_repository.get_tickets()  
-    updated_tickets = ticket_repository.delete_ticket_with_index(index, tickets)
+    updated_tickets = ticket_repository.delete_ticket_with_index(index)
     return updated_tickets
 
 
@@ -74,8 +76,8 @@ async def get_message(
     ticket_repository: TicketRepository = Depends(lambda: ticket_repository),
     message_repository: MessageRepository = Depends(lambda: message_repository),
 ):
-    tickets = ticket_repository.get_tickets()    
-    ticket = ticket_repository.get_ticket_by_id(ticket_id, tickets)
+       
+    ticket = ticket_repository.get_ticket_by_id(ticket_id)
 
     if ticket:
         messages = message_repository.get_messages()

@@ -33,7 +33,8 @@ function index() {
 
     const [tickets, setTickets] = useState<Ticket[]>([]); 
 
-    const [ticketcount, setTicketCount] = useState(0); 
+    const [ticketcountstart, setTicketCountStart] = useState(0); 
+    const [ticketcountend, setTicketCountEnd] = useState(20); 
 
     const [searchTicket, setSearchTicket] = useState(""); 
 
@@ -52,9 +53,9 @@ function index() {
         ts_last_status_change: "null", timestamp: "null", context_messages: []};
 
 
-        const fetchData = async () => {
+        const fetchData = async (ticketcountstart: number, ticketcountend: number) => {
             try {
-              const response = await fetch(`http://localhost:5001/all_tickets/${ticketcount}`);
+              const response = await fetch(`http://localhost:5001/all_tickets/${ticketcountstart}/${ticketcountend}`);
               if (response.ok) 
               {
                 const data = await response.json();    
@@ -74,9 +75,8 @@ function index() {
 
 
     useEffect(() => {        
-        console.log('check');
         
-        fetchData();
+        fetchData(ticketcountstart, ticketcountend);
         
       }, []);
 
@@ -84,7 +84,7 @@ function index() {
       useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await fetch(`http://localhost:5001/all_tickets/${ticketcount}`);
+            const response = await fetch(`http://localhost:5001/all_tickets/${ticketcountstart}/${ticketcountend}`);
             if (response.ok) 
             {
               const data = await response.json();    
@@ -103,6 +103,9 @@ function index() {
     
         if (searchTicket=="")
         {
+            const length = expandList.length;
+            const updatedList: number[] = Array(length).fill(0);
+            setExpandList(updatedList)
             fetchData();
         }
         
@@ -114,9 +117,11 @@ function index() {
 
       const handlebuttonclick =() =>
       {
-        setTicketCount(ticketcount+20);     
+        setTicketCountStart(ticketcountstart);            
 
-        fetchData();
+        fetchData(ticketcountend, ticketcountend+20);
+
+        setTicketCountEnd(ticketcountend+20); 
         
         const updatedList = [...expandList, ...Array(20).fill(0)];
         setExpandList(updatedList);
@@ -148,8 +153,7 @@ function index() {
                 setTickets([defaultTicket])
             }
         }
-                  
-        
+                          
        }
 
       const handleexpandclick = (index: number) =>
@@ -212,23 +216,23 @@ function index() {
             if (!response.ok) {
               throw new Error('Unable to delete ticket');
             }
-            const updatedTickets = await response.json();
+            const updatedTickets = await response.json();           
+            
             setTickets(updatedTickets);
 
-            // setTicketCount(ticketcount-1);
+            setTicketCountEnd(updatedTickets.length);
             
             const updatedExpandList = [
                 ...expandList.slice(0, deleteIndex),
                 ...expandList.slice(deleteIndex + 1)
             ];
-            setExpandList(updatedExpandList);
+            setExpandList(updatedExpandList);           
 
             setOpen(false);
         
         }   catch (error) {
             throw new Error('Could not delete ticket');
         }
-
         
       }
 
