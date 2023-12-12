@@ -54,10 +54,10 @@ async def get_ticket_by_id(
     id:str,
     ticket_repository: TicketRepository = Depends(lambda: ticket_repository),
 ):
-    ticket = ticket_repository.get_ticket_by_id(id)
+    (ticket, count) = ticket_repository.get_ticket_by_id(id)
 
     if ticket:
-        return JSONResponse([ticket], status_code=200)
+        return JSONResponse(([ticket], count), status_code=200)
     return JSONResponse([], status_code=200)
 
 
@@ -77,7 +77,7 @@ async def get_message(
     message_repository: MessageRepository = Depends(lambda: message_repository),
 ):
        
-    ticket = ticket_repository.get_ticket_by_id(ticket_id)
+    (ticket, _) = ticket_repository.get_ticket_by_id(ticket_id)
 
     if ticket:
         messages = message_repository.get_messages()

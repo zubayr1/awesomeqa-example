@@ -37,6 +37,8 @@ function index() {
     const [ticketcountend, setTicketCountEnd] = useState(20); 
 
     const [searchTicket, setSearchTicket] = useState(""); 
+    const [searchedTicketValid, setSearchedTicketValid] = useState(true);
+
 
     const [expandList, setExpandList] = useState(Array.from({ length: 20 }, () => 0));
 
@@ -74,7 +76,10 @@ function index() {
           };
 
 
-    useEffect(() => {        
+    useEffect(() => {      
+      
+      setTicketCountStart(0);
+      setTicketCountEnd(20);      
         
         fetchData(ticketcountstart, ticketcountend);
         
@@ -101,7 +106,7 @@ function index() {
           }
         };
     
-        if (searchTicket=="")
+        if (searchTicket==="")
         {
             const length = expandList.length;
             const updatedList: number[] = Array(length).fill(0);
@@ -140,17 +145,34 @@ function index() {
                 const response = await fetch(`http://localhost:5001/get_ticket_by_id/${searchTicket}`);
                 if (response.ok) 
                 {
-                const data = await response.json();    
-                            
-                setTickets(data);              
+                  const result = await response.json();  
+                  
+                  const data = result[0];
+
+                  const index = result[1];
+
+                  setDeleteIndex(index)
+
+                  if(data!==undefined)
+                  {                    
+                    setTickets(data); 
+                  }
+                  else
+                  {
+                    setSearchedTicketValid(false)
+                    setTickets([defaultTicket])
+                  }                            
+                             
                 } 
                 else 
-                {
-                setTickets([defaultTicket])
+                {                  
+                  setSearchedTicketValid(false)
+                  setTickets([defaultTicket])
                 }
             } catch (error) 
             {
-                setTickets([defaultTicket])
+              setSearchedTicketValid(false)
+              setTickets([defaultTicket])
             }
         }
                           
@@ -194,9 +216,12 @@ function index() {
 
 
       const deletehandler = (index) =>
-      {
-        setDeleteIndex(index)
-
+      {       
+        if (searchTicket==="")
+        {
+          setDeleteIndex(index);
+          setSearchedTicketValid(true);
+        }
         setOpen(true)
       }
 
@@ -219,13 +244,14 @@ function index() {
             const updatedTickets = await response.json();           
             
             setTickets(updatedTickets);
-
+          
             setTicketCountEnd(updatedTickets.length);
             
             const updatedExpandList = [
                 ...expandList.slice(0, deleteIndex),
                 ...expandList.slice(deleteIndex + 1)
             ];
+            updatedExpandList[0]=0;
             setExpandList(updatedExpandList);           
 
             setOpen(false);
@@ -273,7 +299,7 @@ function index() {
       <DialogTitle>Delete Ticket?</DialogTitle>
 
       <Typography variant="h6" color="text.secondary" sx={{marginLeft:'1%'}}>
-        It is a temporary delete. Deleted data can be retrieved if page is refreshed
+        It is a temporary delete. Deleted data can be retrieved if backend is restarted
       </Typography>
 
       
@@ -438,9 +464,12 @@ function index() {
                                         </Grid>
 
                                         <Grid item xs={6} sx={{ textAlign: 'right' }}> 
-                                            <Button onClick={()=> deletehandler(index)} sx={{background: 'red'}}>
+                                          {
+                                            <Button disabled={!searchedTicketValid} onClick={()=> deletehandler(index)} sx={{background: 'red'}}>
                                                 Delete Data
                                             </Button>
+                                          }
+                                            
                                         </Grid>
                                     </Grid>
                                 </CardActions>

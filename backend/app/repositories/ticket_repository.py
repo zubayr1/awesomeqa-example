@@ -32,20 +32,23 @@ class TicketRepository:
         tickets = self.TICKETS[start:end]
         # self.START = start
         self.END = end
-        print(self.START, self.END, len(tickets))
         return tickets
 
-    def get_ticket_by_id(self, ticket_id: int):        
+    def get_ticket_by_id(self, ticket_id: int):  
+        count=0      
         for ticket in self.TICKETS:
-            if ticket["id"]==ticket_id:
-                return ticket        
-        return None    
+            if ticket["id"]==ticket_id and ticket["id"] not in self.DELETED_IDS:
+                return (ticket, count)    
+            count+=1    
+        return (None, None)    
 
     def delete_ticket_with_index(self, index):
         if 0 <= index < len(self.TICKETS):
             deleted_ticket = self.TICKETS.pop(index)
             self.DELETED_IDS.append(deleted_ticket["id"])
-            self.END = self.END - 1
+
+            if index <self.END:
+                self.END = self.END - 1
             return self.TICKETS[self.START:self.END]
         else:
             raise IndexError("Ticket index not found")
