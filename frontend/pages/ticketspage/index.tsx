@@ -108,6 +108,7 @@ function index() {
     
         if (searchTicket==="")
         {
+            setSearchedTicketValid(true);
             const length = expandList.length;
             const updatedList: number[] = Array(length).fill(0);
             setExpandList(updatedList)
