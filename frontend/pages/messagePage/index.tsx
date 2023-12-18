@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Button,Grid, Typography } from "@mui/material";
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'; 
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'; 
+
 import discord_logo from '../../assets/discord_logo.png';
 import telegram_logo from '../../assets/telegram_symbol.png';
 import loading_logo from '../../assets/giphy.gif';
@@ -11,11 +15,19 @@ import SingleMessageHeader from '../../components/MessageBody/SingleMessageHeade
 import SingleMessageUser from '../../components/MessageBody/SingleMessageUser';
 import SingleMessageBody from '../../components/MessageBody/SingleMessageBody';
 import SingleMessageFooter from '../../components/MessageBody/SingleMessageFooter';
+import MessageModal from '../../components/Modals/MessageModal';
+import { CSSTransition } from 'react-transition-group';
+import axios from 'axios';
+
+
+import { useRouter } from 'next/router';
 
 import { DiscordMessage } from '../../types/types';
 
 
 function index() {
+
+  const router = useRouter();
 
   const initialMessage: DiscordMessage = {
     id: null,
@@ -42,9 +54,13 @@ function index() {
     },
   };
 
+  const [open, setOpen] = React.useState(false);
+
   const [message, setMessage] = useState<DiscordMessage>(initialMessage); 
 
   const [imageUrl, setImageUrl] = useState<StaticImageData>(loading_logo); 
+
+  const [headershow, setHeadershow] = React.useState(false);
 
   useEffect(() => {
     const id = localStorage.getItem("id");
@@ -85,26 +101,96 @@ function index() {
     
   }, []);
 
+  const deletehandler = () =>
+  {  
+    setOpen(true)
+  }
+
+  const handlemodaldelete = async () =>
+  {
+    let msg_id = message.id;
+
+    try {
+      const _ = await axios.delete(`http://localhost:5001/delete_message/${msg_id}`);
+            
+      router.push('/ticketspage'); 
+
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+    
+    setOpen(false);
+  }
+
+
+  const handleHeaderShow = () => {
+    setHeadershow(prevShow => !prevShow);
+  };
+
   
+  const handleClose = () => {
+    setOpen(false);
+  };
    
 
   return (
     <div style={{marginTop:'4%'}}>
+
+      <MessageModal
+        handleClose={handleClose}
+        open={open}
+        handleModalDelete={handlemodaldelete}
+      />
+
       <Card sx={{ minWidth: 275, }}>
         <CardContent >
+
+        <Grid container justifyContent="flex-end">
+            <Grid item>
+              {headershow ? (
+                  <KeyboardArrowUpIcon sx={{cursor:'pointer'}} color="primary" fontSize="large" onClick={() => handleHeaderShow()} />
+                ) : (
+                  <KeyboardArrowDownIcon sx={{cursor:'pointer'}} color="primary" fontSize="large" onClick={() => handleHeaderShow()} />
+                )}
+            </Grid>
+          </Grid>
           
-        <SingleMessageHeader message={message} />
+
+        <CSSTransition in={headershow} timeout={300} classNames="header-transition" unmountOnExit>
+            <div className="header-transition">
+              <SingleMessageHeader message={message} />
+            </div>
+          </CSSTransition>
 
             
         <SingleMessageUser author={message.author} />
 
-
+        
         <SingleMessageBody message={message} />
 
         <SingleMessageFooter imageUrl={imageUrl} message={message} />                        
         
                        
         </CardContent>
+
+        <Grid container justifyContent="center">
+          <Button
+            variant="contained"
+            sx={{
+              width: '60%',
+              backgroundColor: 'red',
+              color: 'white',
+              marginTop:'4%',
+              marginBottom: '2%',
+            }}
+
+            onClick={()=> deletehandler()}
+          >
+            Delete 
+          </Button>
+        </Grid>
+
+
       </Card>
     </div>
   )

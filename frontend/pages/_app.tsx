@@ -4,6 +4,9 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import type { AppProps } from "next/app";
 import Layout from "../components/Layout";
 
+import '../styles/transition.css';
+
+
 const theme = createTheme({
   palette: {
     mode: "dark",

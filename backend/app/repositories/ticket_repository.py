@@ -56,3 +56,16 @@ class TicketRepository:
             return self.TICKETS[self.START:self.END]
         else:
             raise IndexError("Ticket index not found")
+        
+
+
+    def delete_ticket_with_msg_id(self, msg_id):
+        index=0
+        for ticket in self.TICKETS:
+            if str(ticket["msg_id"])==str(msg_id):
+                deleted_ticket = self.TICKETS.pop(index)
+                self.DELETED_IDS.append(deleted_ticket["id"])
+                return 
+            
+            index+=1
+        return 

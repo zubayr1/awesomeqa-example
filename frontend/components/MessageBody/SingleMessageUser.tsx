@@ -5,7 +5,19 @@ const SingleMessageUser = ({ author }) => {
   return (
     <Grid sx={{ marginTop: '2%' }} container justifyContent="space-between" alignItems="center">
       <Grid item xs={8}>
-        <img style={{ maxWidth: '40%', height: 'auto', borderRadius: '50%' }} src={author.avatar_url} alt="Avatar" />
+
+        <Grid item xs={8}>
+          <Grid container direction="column" alignItems="flex-start">
+            <Grid item>
+              <img style={{ maxWidth: '60%', height: 'auto', borderRadius: '50%' }} src={author.avatar_url} alt="author_avatar" />
+            </Grid>
+            
+            <Grid item>
+              <Typography variant='h6'>Go to Profile</Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+
       </Grid>
 
       <Grid item xs={4}>

@@ -69,6 +69,17 @@ async def delete_ticket(
     return updated_tickets
 
 
+@app.delete("/delete_message/{msg_id}")
+async def delete_message(
+    msg_id: int):
+    ticket_repository.delete_ticket_with_msg_id(msg_id)
+
+    messages = message_repository.get_messages()
+
+    message_repository.delete_message_with_id(msg_id, messages)
+    return JSONResponse("deletion successfully", status_code=200)
+
+
 
 @app.get("/get_message/{ticket_id}")
 async def get_message(

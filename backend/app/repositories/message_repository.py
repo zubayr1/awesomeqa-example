@@ -16,4 +16,14 @@ class MessageRepository:
             if message["id"]==ticket_id:
                 return message
         return None
+    
+    def delete_message_with_id(self, msg_id, messages):
+        index=0
+        for message in messages:
+            if message["id"]==msg_id:
+                del messages[index]
+                return 
+            
+            index+=1
+        return 
         
