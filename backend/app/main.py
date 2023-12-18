@@ -80,6 +80,41 @@ async def delete_message(
     return JSONResponse("deletion successfully", status_code=200)
 
 
+@app.delete("/ban_user/{msg_id}")
+async def ban_user(
+    msg_id: int):
+    messages = message_repository.get_messages()
+
+    banned_ids = message_repository.delete_message_of_banned_user(msg_id, messages)
+
+    for id in banned_ids:
+        ticket_repository.delete_ticket_with_msg_id(id)
+    
+    return JSONResponse("deletion successfully", status_code=200)
+
+
+
+@app.get("/get_message_by_id/{msg_id}")
+async def get_message_by_id(
+    msg_id: str):
+    messages = message_repository.get_messages()
+    message = message_repository.get_message_with_id(msg_id, messages)
+    if messages:
+        return JSONResponse(message, status_code=200)
+    return JSONResponse(None, status_code=200)
+
+
+
+@app.get("/get_all_message_count_by_id/{msg_id}")
+async def get_all_message_count_by_id(
+    msg_id: str):
+    messages = message_repository.get_messages()
+    count = message_repository.get_all_message_count_by_id(msg_id, messages)
+    if count:
+        return JSONResponse((count, len(messages)), status_code=200)
+    return JSONResponse((0, len(messages)), status_code=200)
+
+
 
 @app.get("/get_message/{ticket_id}")
 async def get_message(

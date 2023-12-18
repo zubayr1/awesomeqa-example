@@ -33,3 +33,14 @@ export interface Ticket {
       timestamp_insert: string;
     };
   };
+
+  export interface Author {
+    id: string;
+    name: string;
+    nickname: string;
+    color: string;
+    discriminator: string;
+    avatar_url: string;
+    is_bot: boolean;
+    timestamp_insert: string;
+  }

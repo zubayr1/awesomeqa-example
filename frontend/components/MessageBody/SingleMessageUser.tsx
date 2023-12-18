@@ -1,19 +1,33 @@
 import React from 'react';
 import { Grid, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
 
 const SingleMessageUser = ({ author }) => {
+
+  const router = useRouter();
+
+  const handle_profile_click =()=>
+  {
+    router.push({
+      pathname: '/profile',
+      query: { author: JSON.stringify(author.id) } 
+    });
+
+    localStorage.setItem("author_id", String(author.id))
+
+  }
+
   return (
     <Grid sx={{ marginTop: '2%' }} container justifyContent="space-between" alignItems="center">
       <Grid item xs={8}>
 
         <Grid item xs={8}>
-          <Grid container direction="column" alignItems="flex-start">
-            <Grid item>
-              <img style={{ maxWidth: '60%', height: 'auto', borderRadius: '50%' }} src={author.avatar_url} alt="author_avatar" />
-            </Grid>
-            
-            <Grid item>
-              <Typography variant='h6'>Go to Profile</Typography>
+          <Grid container justifyContent="space-between" alignItems="center">
+            <Grid item xs={12} style={{ textAlign: 'center' }}>
+              <img style={{ maxWidth: '70%', height: 'auto', borderRadius: '50%' }} src={author.avatar_url} alt="Avatar" />
+              <div onClick={()=>handle_profile_click()}>
+                <Typography sx={{cursor:'pointer'}} variant='h6'>Go to Profile</Typography>
+              </div>
             </Grid>
           </Grid>
         </Grid>
