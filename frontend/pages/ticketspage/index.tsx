@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import Grid from "@mui/material/Grid";
 import { Button, Paper } from "@mui/material";
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
+
 import Typography from '@mui/material/Typography';
-import Expand from '@mui/icons-material/Expand';
-import UnfoldLess from '@mui/icons-material/UnfoldLess';
+
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-import InputBase from '@mui/material/InputBase';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
+
+import TicketbodyMap from '../../components/TicketBody/TicketbodyMap'
+
+import TicketBodyHeader from '../../components/TicketBody/TicketBodyHeader'
 
 import { Ticket } from '../../types/types';
 
@@ -329,149 +327,27 @@ function index() {
         </Paper>
 
 
-        <div
-            style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop:'2%',
-            marginBottom:'2%'
-            
-        }}
-        >
-            <Grid container justifyContent="space-between" alignItems="center">
-                <Grid item>
-                    <Typography variant="h3">All Tickets</Typography>
-                </Grid>
-                
-                <Grid item>
-                    {expanded ? (
-                        <Button onClick={() => handleExpandAllClick(false)} variant="contained" startIcon={<UnfoldLess />}>
-                            Collapse All
-                        </Button>
-                        ) : (
-                        <Button onClick={() => handleExpandAllClick(true)} variant="contained" startIcon={<Expand />}>
-                            Expand All
-                        </Button>
-                    )}
-                </Grid>
-            </Grid>
-        </div>    
-
-        <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop:'2%',
-            marginBottom:'2%'            
-        }}>
-            <Paper
-                component="form"
-                onSubmit={(e)=> handleSearch(e)}
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-                >                
-                <InputBase value={searchTicket} onChange={(e)=>setSearchTicket(e.target.value)} 
-                    sx={{ ml: 1, flex: 1 }}
-                    placeholder="Search Ticket with Ticket Id"
-                    inputProps={{ 'aria-label': 'search google maps' }}
-                />
-                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-                    <SearchIcon />
-                </IconButton>
-                
-            </Paper>
-        </div>
+        <TicketBodyHeader
+          expanded={expanded}
+          handleExpandAllClick={handleExpandAllClick}
+          handleSearch={handleSearch}
+          searchTicket={searchTicket}
+          setSearchTicket={setSearchTicket}
+        />
 
 
         <Grid container spacing={1}>
             {tickets.map((ticket, index) => (
-                <Grid item key={index} xs={12}>
-                    
-                    {expandList[index] === 0 ? (
-                        <div style={{ color: '#ffffff' }}>                    
-                            <Card sx={{ minWidth: 275, }} >
-                                <CardContent sx={{ minWidth: 275, cursor:'pointer' }} onClick={()=> handlecardclick(index)}>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Id: {ticket.id}
-                                    </Typography>
-
-                                    <Typography variant="h5" component="div">
-                                        Message Id: {ticket.msg_id}
-                                    </Typography>
-
-                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        Status: <span style={{ color: 'green' }}>{ticket.status}</span>
-                                    </Typography>
-                                    
-                                    <Typography variant="body2">
-                                        {ticket.timestamp}
-                                    </Typography>
-                                    
-                                </CardContent>
-
-                                <CardActions>
-                                    <Button onClick={()=>handleexpandclick(index)} size="small">Expand</Button>
-                                </CardActions>
-                            </Card>
-                        </div>
-                        ) : (
-                        <div style={{ color: '#ffffff' }}>                    
-                            <Card sx={{ minWidth: 275,}}>
-                                <CardContent sx={{ minWidth: 275, cursor:'pointer' }} onClick={()=> handlecardclick(index)}>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Id: {ticket.id}
-                                    </Typography>
-
-                                    <Typography variant="h5" component="div">
-                                        Message Id: {ticket.msg_id}
-                                    </Typography>
-
-                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        Status: <span style={{ color: 'green' }}>{ticket.status}</span>
-                                    </Typography>
-                                    
-                                    <Typography variant="body2">
-                                        {ticket.timestamp}
-                                    </Typography>
-
-                                    <Paper elevation={3} style={{ marginTop: '1%', padding: '1%' }}>
-                                        <Grid container spacing={0}>
-                                            <Typography variant="body2" gutterBottom>
-                                            Context Message Ids:
-                                            </Typography>
-                                            {ticket.context_messages.map((message, id) => (
-                                            <Grid item key={id} xs={12}>
-                                                <Typography variant="body2">
-                                                {message}
-                                                </Typography>
-                                            </Grid>
-                                            ))}
-                                        </Grid>
-                                    </Paper>
-                                    
-
-                                </CardContent>
-
-                                <CardActions>
-                                    <Grid sx={{marginTop:'2%'}} container justifyContent="space-between" alignItems="center"> 
-                                        <Grid item xs={6}>
-                                            <Button onClick={()=>handleexpandclick(index)} size="small">Collapse</Button>
-                                        </Grid>
-
-                                        <Grid item xs={6} sx={{ textAlign: 'right' }}> 
-                                          {
-                                            <Button disabled={!searchedTicketValid} onClick={()=> deletehandler(index)} sx={{background: 'red'}}>
-                                                Delete Data
-                                            </Button>
-                                          }
-                                            
-                                        </Grid>
-                                    </Grid>
-                                </CardActions>
-                            </Card>
-                        </div>
-                    )}
-                </Grid>
+                <TicketbodyMap
+                key={index}
+                ticket={ticket}
+                index={index}
+                expandList={expandList}
+                handlecardclick={handlecardclick}
+                handleexpandclick={handleexpandclick}
+                deletehandler={deletehandler}
+                searchedTicketValid={searchedTicketValid}
+              />
             ))}
         </Grid>
 

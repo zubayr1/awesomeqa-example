@@ -34,11 +34,15 @@ class TicketRepository:
         self.END = end
         return tickets
 
-    def get_ticket_by_id(self, ticket_id: int):  
+    def get_ticket_by_id(self, ticket_id: str):  
         count=0      
         for ticket in self.TICKETS:
-            if ticket["id"]==ticket_id and ticket["id"] not in self.DELETED_IDS:
-                return (ticket, count)    
+            if len(ticket_id)==19:
+                if ticket["msg_id"]==ticket_id and ticket["id"] not in self.DELETED_IDS:
+                    return (ticket, count)
+            else:
+                if ticket["id"]==ticket_id and ticket["id"] not in self.DELETED_IDS:
+                    return (ticket, count)    
             count+=1    
         return (None, None)    
 
