@@ -29,7 +29,7 @@ class TicketRepository:
             count+=1
             if len(tickets)==(end - start):
                 break
-        tickets = self.TICKETS[start:end]
+        # tickets = self.TICKETS[start:end]
         # self.START = start
         self.END = end
         return tickets

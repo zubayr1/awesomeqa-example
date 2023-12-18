@@ -15,17 +15,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import { Ticket } from '../../types/types';
+
 import { useRouter } from 'next/router';
 
-type Ticket = {
-    id: string;
-    msg_id: string;
-    status: string;
-    resolved_by: string | null;
-    ts_last_status_change: string | null;
-    timestamp: string;
-    context_messages: string[];
-  };
+
 
 function index() {
 

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import Grid from "@mui/material/Grid";
-import { Button, Paper } from "@mui/material";
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import discord_logo from '../../assets/discord_logo.png';
@@ -11,30 +9,8 @@ import telegram_logo from '../../assets/telegram_symbol.png';
 import loading_logo from '../../assets/giphy.gif';
 import Image, { StaticImageData } from 'next/image';
 
-type DiscordMessage = {
-  id: string;
-  channel_id: string;
-  parent_channel_id: string | null;
-  community_server_id: string;
-  timestamp: string;
-  has_attachment: boolean;
-  reference_msg_id: string | null;
-  timestamp_insert: string;
-  discussion_id: string;
-  author_id: string;
-  content: string;
-  msg_url: string;
-  author: {
-    id: string;
-    name: string;
-    nickname: string;
-    color: string;
-    discriminator: string;
-    avatar_url: string;
-    is_bot: boolean;
-    timestamp_insert: string;
-  };
-};
+import { DiscordMessage } from '../../types/types';
+
 
 function index() {
 
