@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Grid from "@mui/material/Grid";
-import { Button, Paper } from "@mui/material";
-
-import Typography from '@mui/material/Typography';
-
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
+import { Button, } from "@mui/material";
 
 import TicketbodyMap from '../../components/TicketBody/TicketbodyMap'
-
 import TicketBodyHeader from '../../components/TicketBody/TicketBodyHeader'
+import TicketModal from '../../components/Modals/TicketModal';
+import ScrollToTop from '../../components/ToTop/ScrollToTop';
 
 import { Ticket } from '../../types/types';
 
@@ -287,73 +281,44 @@ function index() {
 
   return (
     <div>
+    
+    <TicketModal
+      handleClose={handleClose}
+      open={open}
+      handleModalDelete={handlemodaldelete}
+    />
 
-    <Dialog  onClose={handleClose} open={open}>
-      <DialogTitle>Delete Ticket?</DialogTitle>
-
-      <Typography variant="h6" color="text.secondary" sx={{marginLeft:'1%'}}>
-        It is a temporary delete. Deleted data can be retrieved if backend is restarted
-      </Typography>
-
-      
-      <div style={{ textAlign: 'right', marginLeft: 'auto', margin:'2%' }}>
-            <Button onClick={()=>handlemodaldelete()} sx={{background:'red'}}>Yes, Delete</Button>
-        </div>
-      
-    </Dialog>
+    <ScrollToTop isVisible={isVisible} scrollToTop={scrollToTop} />
 
 
-
-        <Paper
-            sx={{
-                position: 'fixed',
-                bottom: '2%',
-                right: '2%',
-                display: isVisible ? 'block' : 'none',
-                zIndex: 9999,
-                padding: '8px',
-                borderRadius: '50%',
-            }}
-            >
-            <Button
-                onClick={scrollToTop}
-                variant="contained"
-                color="primary"
-                size="large"
-                startIcon={<KeyboardArrowUpIcon />}
-            >
-                Scroll To Top
-            </Button>
-        </Paper>
+    <TicketBodyHeader
+      expanded={expanded}
+      handleExpandAllClick={handleExpandAllClick}
+      handleSearch={handleSearch}
+      searchTicket={searchTicket}
+      setSearchTicket={setSearchTicket}
+    />
 
 
-        <TicketBodyHeader
-          expanded={expanded}
-          handleExpandAllClick={handleExpandAllClick}
-          handleSearch={handleSearch}
-          searchTicket={searchTicket}
-          setSearchTicket={setSearchTicket}
-        />
+    <Grid container spacing={1}>
+        {tickets.map((ticket, index) => (
+            <TicketbodyMap
+            key={index}
+            ticket={ticket}
+            index={index}
+            expandList={expandList}
+            handlecardclick={handlecardclick}
+            handleexpandclick={handleexpandclick}
+            deletehandler={deletehandler}
+            searchedTicketValid={searchedTicketValid}
+          />
+        ))}
+    </Grid>
 
+      <div style={{marginTop:'2%'}}>
+          <Button disabled={tickets.length == 1 || tickets.length == 0} onClick={()=>handlebuttonclick()}>Load More</Button>
+      </div>
 
-        <Grid container spacing={1}>
-            {tickets.map((ticket, index) => (
-                <TicketbodyMap
-                key={index}
-                ticket={ticket}
-                index={index}
-                expandList={expandList}
-                handlecardclick={handlecardclick}
-                handleexpandclick={handleexpandclick}
-                deletehandler={deletehandler}
-                searchedTicketValid={searchedTicketValid}
-              />
-            ))}
-        </Grid>
-
-        <div style={{marginTop:'2%'}}>
-            <Button disabled={tickets.length == 1 || tickets.length == 0} onClick={()=>handlebuttonclick()}>Load More</Button>
-        </div>
     </div>
   )
 }
