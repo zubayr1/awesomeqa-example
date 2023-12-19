@@ -18,6 +18,8 @@ More information on Backend:
 4. /delete_ticket/{index}: Get a ticket at index: index.
 5. /get_message/{ticket_id}: Get message corresponding to a ticket id.
 6. DELETED_IDS: Stores the ids of the deleted tickets.
+7. /get_all_message_count_by_id/{msg_id}: Get number of messages by an author
+8. /ban_user/{msg_id}: Ban an author.
 
 ### Frontend
 
@@ -29,6 +31,6 @@ More information on Frontend:
 
 1. /ticketspage: Page displaying all tickets (filtering 20 tickets at a time).
 2. /messagePage: Page displaying message corresponding to a ticket.
-
+3. /profile: Page displaying profile corresponding to an author.
 
 ### Happy coding 🎉

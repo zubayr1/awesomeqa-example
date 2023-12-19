@@ -15,7 +15,6 @@ function index() {
 
   const router = useRouter();
 
-  
   let [author_id, setAuthor_id] = useState<string | null>(null);
 
   const [open, setOpen] = React.useState(false);
@@ -24,8 +23,19 @@ function index() {
   useEffect(() => {   
     let author_id = localStorage.getItem('author_id');
 
-    setAuthor_id(author_id);  
+    const currentPath = router.asPath;
 
+    const id = currentPath.replace('/profile?author=%22', '').replace('%22', '');
+
+    if(id!==null && id!==undefined)
+    {
+      setAuthor_id(id);
+    }
+    else
+    {
+      setAuthor_id(author_id);  
+    }
+    
   }, []);
 
   const handleClick = () => {
