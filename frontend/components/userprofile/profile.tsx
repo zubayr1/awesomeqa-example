@@ -81,4 +81,4 @@ function Profile({author_id}) {
                         '@media (min-width: 601px) and (max-width: 900px)': {
                         fontSize: '18px',
                         },
- 
+                

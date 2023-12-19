@@ -1,14 +1,14 @@
 import React from 'react'
 import { Grid, Typography } from '@mui/material';
 
-function profile({author}) {
+function profile({author_id}) {
   return (
     <div>
         <Grid sx={{ marginTop: '2%' }} container justifyContent="space-between" alignItems="center">
             <Grid item xs={8}>
 
                 <Grid item xs={8}>
-                    <img style={{ maxWidth: '70%', height: 'auto', borderRadius: '50%' }} src={author.avatar_url} alt="Avatar" />
+                    <img style={{ maxWidth: '70%', height: 'auto', borderRadius: '50%' }} src={author_id.avatar_url} alt="Avatar" />
                 </Grid>
 
             </Grid>
@@ -31,7 +31,7 @@ function profile({author}) {
                     color="text.secondary"
                     gutterBottom
                     >
-                    Id: {author.id}
+                    Id: {author_id.id}
                     </Typography>
                 </Grid>
 
@@ -51,7 +51,7 @@ function profile({author}) {
                     color="text.primary"
                     gutterBottom
                     >
-                    Name: {author.name}
+                    Name: {author_id.name}
                     </Typography>
                 </Grid>
 
@@ -71,7 +71,7 @@ function profile({author}) {
                     color="text.primary"
                     gutterBottom
                     >
-                    Nickname: {author.nickname}
+                    Nickname: {author_id.nickname}
                     </Typography>
                 </Grid>
                 </Grid>

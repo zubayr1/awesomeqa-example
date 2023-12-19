@@ -47,11 +47,8 @@ class MessageRepository:
 
     def delete_message_of_banned_user(self, msg_id, messages):
         banned_ids=[]
-        index=0
         for message in messages:
             if str(message["author_id"])==str(msg_id):                
                 banned_ids.append(str(message["id"])) 
-                del messages[index]  
-            index+=1
-            
+                            
         return banned_ids

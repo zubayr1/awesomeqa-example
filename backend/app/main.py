@@ -86,7 +86,6 @@ async def ban_user(
     messages = message_repository.get_messages()
 
     banned_ids = message_repository.delete_message_of_banned_user(msg_id, messages)
-
     for id in banned_ids:
         ticket_repository.delete_ticket_with_msg_id(id)
     

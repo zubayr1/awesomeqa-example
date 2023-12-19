@@ -42,24 +42,24 @@ function index() {
 
 
         const fetchData = async (ticketcountstart: number, ticketcountend: number) => {
-            try {
-              const response = await fetch(`http://localhost:5001/all_tickets/${ticketcountstart}/${ticketcountend}`);
-              if (response.ok) 
-              {
-                const data = await response.json();    
-                         
-                setTickets((prevTickets) => [...prevTickets, ...data]);
-              
-              } 
-              else 
-              {
-                setTickets([defaultTicket])
-              }
-            } catch (error) 
+          try {
+            const response = await fetch(`http://localhost:5001/all_tickets/${ticketcountstart}/${ticketcountend}`);
+            if (response.ok) 
+            {
+              const data = await response.json();    
+                        
+              setTickets((prevTickets) => [...prevTickets, ...data]);
+            
+            } 
+            else 
             {
               setTickets([defaultTicket])
             }
-          };
+          } catch (error) 
+          {
+            setTickets([defaultTicket])
+          }
+        };
 
 
     useEffect(() => {      
@@ -67,7 +67,7 @@ function index() {
       setTicketCountStart(0);
       setTicketCountEnd(20);      
         
-        fetchData(ticketcountstart, ticketcountend);
+      fetchData(ticketcountstart, ticketcountend);
         
       }, []);
 
